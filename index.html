@@ -1,1 +1,67 @@
-test
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnonymClouds</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f5f5f5;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    #status {
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="login-form">
+    <h2>Login / Registrierung</h2>
+    <input type="email" id="email" placeholder="Deine E-Mail-Adresse" required />
+    <button type="submit">Login-Link senden</button>
+    <p id="status"></p>
+  </form>
+
+  <script>
+    // === Supabase konfigurieren ===
+    const SUPABASE_URL = 'https://hkhbbetjdpsgccpfkyjh.supabase.co'; // 🔁 ERSETZEN
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhraGJiZXRqZHBzZ2NjcGZreWpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxODE1MTYsImV4cCI6MjA2NDc1NzUxNn0.I0FyfGR6M1gN5oFKCqRPySSitdc8O3ZwhCrKnR5JDBw';                         // 🔁 ERSETZEN
+
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // === Login-Formular Funktion ===
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email,
+        options: {
+          emailRedirectTo: 'https://anonymclouds.github.io/fun/' // exakt wie dein GitHub-Link
+        }
+      });
+
+      document.getElementById('status').innerText = error
+        ? "Fehler: " + error.message
+        : "Check deine E-Mail für den Anmelde-Link.";
+    });
+  </script>
+</body>
+</html>
